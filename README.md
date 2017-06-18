@@ -1,5 +1,6 @@
 # Model Evaluation and Validation
 This project is completed as a part of Udacity's Machine Learning Engineer Nanodegree program.
+Refer to [boston_housing.ipynb](https://github.com/maunesh/predict-boston-housing-prices/blob/master/boston_housing.ipynb) for the code/documentation and other details.
 
 ## Project: Predicting Boston Housing Prices
 
