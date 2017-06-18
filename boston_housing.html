@@ -11795,7 +11795,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Import libraries necessary for this project</span>
@@ -11899,23 +11899,23 @@ features:
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Minimum price of the data</span>
-<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>    <span class="c1"># Applying Pandas methods on &#39;prices&#39; dataframe in this section</span>
+<span class="n">minimum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Maximum price of the data</span>
-<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">maximum_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Mean price of the data</span>
-<span class="n">mean_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">mean_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Median price of the data</span>
-<span class="n">median_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">median_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># TODO: Standard deviation of prices of the data</span>
-<span class="n">std_price</span> <span class="o">=</span> <span class="n">prices</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">std_price</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">prices</span><span class="p">)</span>
 
 <span class="c1"># Show the calculated statistics</span>
 <span class="k">print</span> <span class="s2">&quot;Statistics for Boston housing dataset:</span><span class="se">\n</span><span class="s2">&quot;</span>
@@ -11938,11 +11938,11 @@ features:
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Statistics for Boston housing dataset:
 
-Minimum price: $105,000.00
+Minimum price: $454,342.94
 Maximum price: $1,024,800.00
 Mean price: $454,342.94
 Median price $438,900.00
-Standard deviation of prices: $165,340.28
+Standard deviation of prices: $165,171.13
 </pre>
 </div>
 </div>
@@ -14708,7 +14708,10 @@ to capture underlying relationship in a model. </li>
 This is a sign of <em>overfitting</em>, because with maxumum depth of 10, the model is too complex and
 it does not generalize well. </li>
 <li>Visual Cues: As the maximum depth increases, the training score increases, and after a certain depth, 
-the testing score begins to decrease. </li>
+the testing score begins to decrease. If we were given only the training score and testing score of two 
+models, and if one of the models has relatively good accuracy on training set, but bad accuracy on testing set, 
+this is the error due to bias. Similarly, if the model has very high accuracy, but the the accuracy is bad on
+testing set, then this is the error due to variance. </li>
 </ul>
 
 </div>
@@ -14810,15 +14813,22 @@ to fit the model. </li>
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer: </strong></p>
 <ul>
-<li><p>In K-Folds Cross Validation, we would partition our dataset into K "bins". 
+<li>In K-Folds Cross Validation, we would partition our dataset into K "bins". 
 For example, if the dataset has 200 items, and if K=10, each "bin" has 20 items.
 Now, we can run K separate learning experiments. In each of them we'd pick one of the K bins as
-our test-set, and the remaining (K-1) bins will be training-set.</p>
-</li>
-<li><p>A big advantage of doing K-folds cross validation is that we'd end up using all of our data for training.
+our test-set, and the remaining (K-1) bins will be training-set.</li>
+<li>Each bin/subset can be used for testing once for each model. For example, if we are doing polynomial regression, 
+we can use K-Folds Cross Validation, with each subset being the test-set, for models with varying degrees of
+freedom. </li>
+<li>The results from these tests can be combined by taking taking the average of all test-sets.</li>
+<li>A big advantage of doing K-folds cross validation is that we'd end up using all of our data for training.
 Cross Validation also helps to serve as a check for overfitting, while optimizing parameters with Grid-Search.
-So by using K-folds CV, we can train our model using the entire dataset, without worrying about overfitting.</p>
-</li>
+So by using K-folds CV, we can train our model using the entire dataset, without worrying about overfitting. </li>
+<li>Cross Validation also prevents overfitting, because it creates multiple unique training-sets. So suppose, if the
+entire training set was not the representative of the dataset, when we train on a subset of the dataset, we 
+are likely to eliminate the non-representative data. By rotating the data to create multiple unique training sets,
+we can lessen the impact of outliers or imbalances in the data during the tuning process. This significantly 
+helps reduce the possibility of overfitting.</li>
 </ul>
 
 </div>
